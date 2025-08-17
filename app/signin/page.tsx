@@ -15,7 +15,7 @@ function Signin() {
     console.log(email, password);
   };
   return (
-    <div className="lg:max-w-3xl mx-auto">
+    <div className="lg:max-w-3xl mx-auto min-h-screen ">
       <h1
         className="font-extrabold text-4xl sm:text-5xl tracking-tight  text-center pt-20 pb-14
              bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-500 
