@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 
-function signin() {
+function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [loading, setLoading] = useState(false);
@@ -77,4 +77,4 @@ function signin() {
   );
 }
 
-export default signin;
+export default Signin;
