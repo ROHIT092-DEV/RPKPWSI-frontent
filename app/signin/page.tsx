@@ -1,13 +1,14 @@
-"use client";
+'use client'
 
 import Link from "next/link";
 import { useState } from "react";
 
+
 function signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState();
 
   const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
