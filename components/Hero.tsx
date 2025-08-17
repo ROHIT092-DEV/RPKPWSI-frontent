@@ -35,10 +35,10 @@ export default function Hero() {
             </li>
           </ul>
 
-          <div className="mt-8">
+          <div className="mt-8 items-center justify-center flex">
             <Link
               href="/project"
-              className="inline-flex items-center justify-center rounded-sm bg-indigo-400 px-8 py-3 text-lg font-semibold text-white shadow-md hover:bg-blue-700 transition"
+              className="inline-flex rounded-sm bg-indigo-400  text-lg py-3 px-8 font-semibold text-white shadow-md hover:bg-blue-700 transition"
             >
               CLICK HERE FOR MORE INFO!
             </Link>
