@@ -5,12 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Search, ChevronRight, LogIn } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import logo from '@/public/logo.jpg'
+import logo from "@/public/logo.jpg";
 
-const navLinks = [
-  { label: "Project", href: "/project" },
- 
-];
+const navLinks = [{ label: "Project", href: "/project" }];
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -31,7 +28,12 @@ export default function Header() {
         <div className="flex items-center justify-between px-2 py-4">
           {/* Left - Logo */}
           <Link href="/" className="p-2">
-            <Image src={logo } alt="" width={40} height={40}/>
+            <Image src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80"
+
+              alt=""
+              width={40}
+              height={40}
+            />
           </Link>
 
           {/* Center - Desktop Nav */}
@@ -40,7 +42,7 @@ export default function Header() {
               <Link
                 key={l.href}
                 href={l.href}
-                className=" transition-colors text-white"
+                className=" transition-colors text-gray-300"
               >
                 {l.label}
               </Link>
@@ -49,7 +51,7 @@ export default function Header() {
 
           {/* Right - Actions */}
           <div className="flex items-center gap-2">
-            <button className="hidden md:inline-flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm hover:shadow text-white">
+            <button className="hidden md:inline-flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm hover:shadow text-gray-300">
               <LogIn className="h-4 w-4" />
               <span>Login</span>
             </button>
@@ -60,7 +62,7 @@ export default function Header() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="topmenu-panel"
-              className="inline-flex items-center justify-center rounded-2xl border px-3 py-2 text-white hover:shadow md:hidden"
+              className="inline-flex items-center justify-center rounded-2xl border px-3 py-2 text-gray-300 hover:shadow md:hidden"
             >
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               <span className="sr-only">Toggle menu</span>
@@ -79,7 +81,7 @@ export default function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="overflow-hidden border-b bg-gray-900 text-white"
+            className="overflow-hidden border-b bg-gray-900 text-gray-300"
           >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4">
               <ul className="grid gap-1">
@@ -108,7 +110,7 @@ export default function Header() {
                 <Link
                   href="/signup"
                   onClick={() => setOpen(false)}
-                  className="inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800"
+                  className="inline-flex w-full items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-neutral-800"
                 >
                   Sign up
                 </Link>
