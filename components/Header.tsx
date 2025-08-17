@@ -51,10 +51,10 @@ export default function Header() {
 
           {/* Right - Actions */}
           <div className="flex items-center gap-2">
-            <button className="hidden md:inline-flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm hover:shadow text-gray-300">
+            <Link href="/signin" className="hidden md:inline-flex items-center gap-2 rounded-2xl border px-3 py-1.5 text-sm hover:shadow text-gray-300">
               <LogIn className="h-4 w-4" />
               <span>Login</span>
-            </button>
+            </Link>
 
             {/* Mobile menu button */}
             <button
@@ -101,7 +101,7 @@ export default function Header() {
 
               <div className="mt-4 flex items-center gap-2">
                 <Link
-                  href="/login"
+                  href="/signin"
                   onClick={() => setOpen(false)}
                   className="inline-flex w-full items-center justify-center rounded-xl border px-4 py-2 text-sm font-medium hover:shadow"
                 >
