@@ -1,18 +1,50 @@
-'use client'
+"use client";
 
+import Spinner from "@/components/Spinners";
 import Link from "next/link";
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
+import { useSetRecoilState } from "recoil";
+import { authState, User } from "@/recoil/authAtom";
 
 function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleLoginSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+    const setAuth = useSetRecoilState(authState);
+
+
+  const handleLoginSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(email, password);
+    
+    // Login Logic Here
+
+     try {
+      const res = await fetch("http://localhost:5000/api/v1/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include", // send/receive cookies
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) throw new Error("Invalid credentials");
+
+      const data: { user: User } = await res.json();
+
+      setAuth({
+        isAuthenticated: true,
+        user: data.user,
+      });
+
+      router.push("/user");
+    } catch (err: any) {
+      setError(err.message);
+    }
+
+
   };
   return (
     <div className="lg:max-w-3xl mx-auto min-h-screen ">
@@ -23,6 +55,32 @@ function Signin() {
       >
         Instagram
       </h1>
+
+      {/* Error Show case */}
+
+      <div className="px-4">
+        {error && (
+        <div
+          className="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 shadow-sm "
+          role="alert"
+        >
+          <svg
+            className="flex-shrink-0 inline w-5 h-5 mr-3 text-red-600"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9 14h2v2H9v-2Zm0-8h2v6H9V6Z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+          <span className="font-medium">{error}</span>
+        </div>
+      )}
+
+
+      </div>
 
       <div className="px-2 border">
         <form onSubmit={handleLoginSubmit} className="space-y-4">
@@ -56,7 +114,7 @@ function Signin() {
           </span>
 
           <button className="bg-blue-600 w-full py-3 text-white font-medium rounded-sm cursor-pointer">
-            Log In
+            {loading ? <Spinner /> : "Log In"}
           </button>
 
           <div>
