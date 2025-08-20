@@ -49,7 +49,7 @@ export default function Signin() {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError("Something went wrong");
+        setError("Something went wrong plz check");
       }
     } finally {
       setLoading(false);
