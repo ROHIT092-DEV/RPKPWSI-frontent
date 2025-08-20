@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const testimonials = [
   {
@@ -35,31 +36,39 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-gray-50 dark:bg-gray-900 py-16">
-      <div className="max-w-7xl mx-auto px-6 text-center">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+    <section className="relative bg-gray-50 dark:bg-gray-950 py-20 overflow-hidden">
+      {/* background gradient decoration */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-yellow-200/30 via-transparent to-purple-300/20 dark:from-yellow-500/10 dark:to-purple-500/10 pointer-events-none" />
+
+      <div className="relative max-w-7xl mx-auto px-6 text-center">
+        <h2 className="text-4xl font-extrabold text-gray-900 dark:text-white">
           🌟 What People Say
         </h2>
-        <p className="mt-2 text-gray-600 dark:text-gray-300">
-          Testimonials from clients and collaborators
+        <p className="mt-3 text-lg text-gray-600 dark:text-gray-300">
+          Trusted by clients and collaborators worldwide
         </p>
 
-        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {/* grid */}
+        <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {testimonials.map((testimonial, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md hover:shadow-xl transition duration-300 text-left"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.2, duration: 0.6 }}
+              className="group relative bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 flex flex-col justify-between h-full border border-transparent hover:border-yellow-400"
             >
-              <div className="flex items-center space-x-4 mb-4">
+              <div className="flex items-center gap-4 mb-6">
                 <Image
                   src={testimonial.image}
                   alt={testimonial.name}
                   width={60}
                   height={60}
-                  className="rounded-full object-cover ring-2 ring-blue-500 shadow-md"
+                  className="rounded-full object-cover ring-4 ring-yellow-400/70 group-hover:scale-105 transition-transform duration-300"
                 />
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                <div className="text-left">
+                  <h4 className="font-bold text-gray-900 dark:text-gray-100">
                     {testimonial.name}
                   </h4>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -67,10 +76,11 @@ export default function Testimonials() {
                   </p>
                 </div>
               </div>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
                 “{testimonial.quote}”
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

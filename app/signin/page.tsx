@@ -2,15 +2,26 @@
 
 import Spinner from "@/components/Spinners";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
+
+const images = [
+  "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1492724441997-5dc865305da7?auto=format&fit=crop&w=1200&q=80",
+];
 
 export default function Signin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [index, setIndex] = useState(0);
 
   const router = useRouter();
   const setUser = useAuthStore((state) => state.setUser);
@@ -24,116 +35,121 @@ export default function Signin() {
       const res = await fetch("http://localhost:5000/api/v1/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include", // send/receive cookies
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
-      if (!res.ok) throw new Error("Invalid credentials");
+      if (!res.ok) throw new Error("Invalid email or password");
 
       const data = await res.json();
       setUser(data);
       router.push("/");
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Something went wrong");
-      }
+    } catch (err: any) {
+      setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
+  // Auto change image every 4s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="min-h-screen flex  pt-30 pb-10 justify-center  px-4 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="w-full max-w-md bg-white dark:bg-gray-900 border rounded-2xl shadow-xl p-8">
-        {/* Logo */}
-        <h1 className="font-extrabold text-4xl sm:text-5xl tracking-tight text-center mb-8 bg-gradient-to-r from-pink-500 via-purple-500 to-yellow-500 bg-clip-text text-transparent drop-shadow-lg italic">
-          Instagram
-        </h1>
-
-        {/* Error Message */}
-        {error && (
-          <div
-            className="flex items-center p-4 mb-6 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-red-900/20 dark:text-red-300"
-            role="alert"
+    <div className="min-h-screen flex flex-col md:flex-row pt-20 lg:pt-0">
+      {/* Left Animated Image Section */}
+      <div className="hidden md:flex md:w-1/2 relative items-center justify-center overflow-hidden">
+        <AnimatePresence mode="sync">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: "easeInOut" }}
+            className="absolute inset-0"
           >
-            <svg
-              className="flex-shrink-0 w-5 h-5 mr-3 text-red-600 dark:text-red-400"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9 14h2v2H9v-2Zm0-8h2v6H9V6Z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-            <span className="font-medium">{error}</span>
-          </div>
-        )}
+            <Image
+              src={images[index]}
+              alt="Login Illustration"
+              fill
+              priority
+              className="object-cover"
+            />
+          </motion.div>
+        </AnimatePresence>
 
-        {/* Form */}
-        <form onSubmit={handleLoginSubmit} className="space-y-5">
-          <div>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+       
+      </div>
+
+      {/* Right Form Section */}
+      <div className="flex w-full md:w-1/2 items-center justify-center p-6]">
+        <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8">
+          {/* Logo */}
+          <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+            Instagram
+          </h1>
+
+          {/* Error */}
+          {error && (
+            <div className="mb-4 p-3 rounded-lg bg-red-100 text-red-600 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleLoginSubmit} className="space-y-5">
             <input
               type="email"
               value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               required
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 
-                focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent
-                text-gray-700 dark:text-gray-200 placeholder-gray-400 
-                bg-gray-50 dark:bg-gray-800 shadow-sm transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:outline-none text-gray-700 dark:bg-gray-800 dark:text-gray-200"
             />
-          </div>
 
-          <div>
             <input
               type="password"
               value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setPassword(e.target.value)
-              }
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               required
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 
-                focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent
-                text-gray-700 dark:text-gray-200 placeholder-gray-400 
-                bg-gray-50 dark:bg-gray-800 shadow-sm transition-all duration-300"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:outline-none text-gray-700 dark:bg-gray-800 dark:text-gray-200"
             />
-          </div>
 
-          <div className="flex justify-end">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
+            <div className="flex justify-end">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-pink-600 hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-pink-500 to-purple-600 hover:opacity-90 transition disabled:opacity-70"
             >
-              Forgot password?
+              {loading ? <Spinner /> : "Log In"}
+            </button>
+          </form>
+
+          {/* Footer */}
+          <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+            Don’t have an account?{" "}
+            <Link
+              href="/signup"
+              className="text-pink-600 hover:underline font-medium"
+            >
+              Sign Up
             </Link>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-xl font-semibold text-white bg-pink-600 hover:bg-pink-700 transition disabled:opacity-70 disabled:cursor-not-allowed"
-          >
-            {loading ? <Spinner /> : "Log In"}
-          </button>
-        </form>
-
-        {/* Footer */}
-        <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          Don’t have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-indigo-600 dark:text-indigo-400 hover:underline font-medium"
-          >
-            Sign Up
-          </Link>
+          </p>
         </div>
       </div>
     </div>

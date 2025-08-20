@@ -11,7 +11,7 @@ export default function Hero() {
       <div className="mx-auto max-w-7xl px-6 py-16 lg:flex lg:items-center lg:gap-16">
         {/* Left Section */}
         <div className="flex-1 space-y-6">
-          <h2 className="text-4xl sm:text-5xl font-extrabold leading-tight">
+          <h2 className="text-4xl sm:text-3xl font-extrabold leading-tight">
             Introducing
             <br />
             <span className="bg-gradient-to-r from-indigo-400 via-pink-400 to-yellow-400 bg-clip-text text-transparent">
