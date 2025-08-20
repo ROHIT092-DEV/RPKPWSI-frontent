@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { Input } from "@/components/ui/input";
 
 const images = [
   "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1200&q=80",
@@ -44,8 +45,12 @@ export default function Signin() {
       const data = await res.json();
       setUser(data);
       router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Something went wrong");
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       setLoading(false);
     }
@@ -84,11 +89,10 @@ export default function Signin() {
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-       
       </div>
 
       {/* Right Form Section */}
-      <div className="flex w-full md:w-1/2 items-center justify-center p-6]">
+      <div className="flex w-full md:w-1/2 items-center justify-center p-6">
         <div className="w-full max-w-md bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8">
           {/* Logo */}
           <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
@@ -104,23 +108,35 @@ export default function Signin() {
 
           {/* Form */}
           <form onSubmit={handleLoginSubmit} className="space-y-5">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              required
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:outline-none text-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
+            <motion.div
+              initial={{ scale: 1 }}
+              whileFocus={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                required
+                className="h-12 px-4 border-gray-300 focus:ring-2 focus:ring-pink-500"
+              />
+            </motion.div>
 
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-pink-500 focus:outline-none text-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            />
+            <motion.div
+              initial={{ scale: 1 }}
+              whileFocus={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required
+                className="h-12 px-4 border-gray-300 focus:ring-2 focus:ring-pink-500"
+              />
+            </motion.div>
 
             <div className="flex justify-end">
               <Link
